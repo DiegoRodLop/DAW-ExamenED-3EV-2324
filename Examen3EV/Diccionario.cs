@@ -9,15 +9,16 @@ namespace Examen3EV
 {
     // Clase que construye un diccionario de palabras a partir de dos frases
     // El dicionario estará ordenado alfabéticamente
-    internal class Diccionario
+    public class Diccionario
     {
         public List<String> words;
         public int wordcount;
 
         public Diccionario()
         {
-            words=new List<String>();
-            wordcount=0;
+            words = new List<String>();
+
+            wordcount = 0;
         }
 
         // Método que analiza las frases
@@ -28,36 +29,34 @@ namespace Examen3EV
         // -2: la segunda cadena no es válida
         // 0: operación correcta
         //
-        public int analizar(String f1, String f2)
+        public int Analizar(String f1, String f2)
         {
             String word;
-            words.Clear();
-            wordcount=0;
-            // primer paso, analizar la primera cadena
-            if (f1!=null || f1.Length==0) return -1;
 
-            int posini=0;
-            int posfin=f1.IndexOf(' '); // encontramos el primer espacio
-            while (posfin!=-1) {
-                word=f1.Substring(posini,posfin-posini);
-                if (word.Length>0 && !words.Contains(word)) {
-                    words.Add(word);
-                    wordcount++;
-                }
-                posini = posfin + 1;
-                posfin = f1.IndexOf(' ', posini);
-            }
-            // añadimos la última palabra
-            word =f1.Substring(posini,f1.Length-posini);
-            words.Add(word);
-            wordcount++;
+            words.Clear();
+
+            wordcount = 0;
+
+            // primer paso, analizar la primera cadena
+            if (f1 == null || f1.Length == 0) return -1;
+
+            int posini, posfin;
+            ProcesadoPrimeraFrase(f1, out word, out posini, out posfin);
+
+            posini = 0;
+            posfin = f2.IndexOf(' '); // encontramos el primer espacio
 
             // segundo paso, analizar la segunda cadena
-            if (f2!=null || f2.Length==0) return -2;
+            if (f2 == null || f2.Length == 0)
+            {
+                return -2;
+            }
 
-            while (posfin!=-1) {
-                word=f2.Substring(posini,posfin-posini);
-                if (word.Length>0 && !words.Contains(word)) {
+            while (posfin != -1)
+            {
+                word = f2.Substring(posini, posfin - posini);
+                if (word.Length > 0 && !words.Contains(word))
+                {
                     words.Add(word);
                     wordcount++;
                 }
@@ -72,6 +71,25 @@ namespace Examen3EV
             // tercer paso, Ordenar las palabras
             words.Sort();
             return 0;
+        }
+
+        private void ProcesadoPrimeraFrase(string f1, out string word, out int posini, out int posfin)
+        {
+            posini = 0;
+            posfin = f1.IndexOf(' ');
+            while (posfin != -1)
+            {
+                word = f1.Substring(posini, posfin - posini);
+                if (word.Length > 0 && !words.Contains(word))
+                {
+                    words.Add(word);
+                    wordcount++;
+                }
+                posini = posfin + 1;
+                posfin = f1.IndexOf(' ', posini);
+            }
+            // añadimos la última palabra
+            word = f1.Substring(posini, f1.Length - posini);
         }
     }
 }
